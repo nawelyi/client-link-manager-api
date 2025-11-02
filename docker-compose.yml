@@ -1,0 +1,28 @@
+version: '3.8' # Versión de Docker Compose
+services:
+  # Este es el nombre de nuestro servicio de base de datos
+  db:
+    image: postgres:15-alpine # Usamos la imagen oficial de Postgres 15 (versión "alpine" ligera)
+    container_name: client_manager_db # Un nombre amigable para el contenedor
+    restart: always # Siempre reinicia el contenedor si se cae
+    environment:
+      # Estas son las credenciales. NUNCA uses esto en producción.
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: client_manager_db
+    ports:
+      # Mapea el puerto 5432 de tu laptop al puerto 5432 del contenedor
+      - "5432:5432"
+    volumes:
+      # (Opcional pero recomendado) Guarda los datos de la BD en tu laptop
+      # para que no se borren si destruyes el contenedor
+      - ./docker-data/postgres:/var/lib/postgresql/data
+
+# Define la red (buena práctica)
+networks:
+  default:
+    driver: bridge
+
+# Define los volúmenes
+volumes:
+  docker-data:

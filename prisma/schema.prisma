@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id         String   @id @default(cuid()) // ID único (tipo CUID)
+  email      String   @unique // El email debe ser único
+  first_name String
+  last_name  String? // El '?' lo hace opcional
+  password   String
+  role       Role     @default(USER) // Por defecto es 'USER'
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // --- Relación ---
+  // Un User tiene muchos Clients
+  clients Client[]
+}
+
+model Client {
+  id   String @id @default(cuid())
+  name String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // --- Relación ---
+  // Un Client pertenece a un User
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String // Esta es la "Foreign Key"
+
+  // Un Client tiene muchos Links
+  links Link[]
+}
+
+model Link {
+  id    String @id @default(cuid())
+  title String
+  url   String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // --- Relación ---
+  // Un Link pertenece a un Client
+  client    Client @relation(fields: [clientId], references: [id])
+  clientId  String // Esta es la "Foreign Key"
+}

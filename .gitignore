@@ -1,0 +1,11 @@
+# Dependencias
+node_modules
+
+# Archivos de entorno (SECRETOS)
+.env
+
+# Código compilado
+/dist
+
+# Data de Docker
+docker-data
