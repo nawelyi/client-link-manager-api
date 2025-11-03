@@ -4,10 +4,10 @@ import { registerSchema } from "./auth.validation";
 
 const validate = (schema: any) => (req: any, res: any, next: any) => {
     try {
-        schema.parse({body: req.body, query: req.query, params: req.params});
+        schema.parse({body: req.body});
         next();
     } catch (e: any) {
-        return res.status(400).send(e.errors);
+        return res.status(400).json({error: e.flatten().fieldErrors});
     }
 }
 
