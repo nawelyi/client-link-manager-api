@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { registerHandler } from "./auth.controller";
-import { registerSchema } from "./auth.validation";
+import { registerHandler, loginHandler } from "./auth.controller";
+import { registerSchema, loginSchema } from "./auth.validation";
 
 const validate = (schema: any) => (req: any, res: any, next: any) => {
     try {
@@ -14,5 +14,6 @@ const validate = (schema: any) => (req: any, res: any, next: any) => {
 const router = Router();
 
 router.post('/register', validate(registerSchema), registerHandler);
+router.post('/login', validate(loginSchema), loginHandler);
 
 export default router;
