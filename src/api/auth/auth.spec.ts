@@ -4,10 +4,13 @@ import supertest from 'supertest'
 
 const request = supertest(app);
 
-describe('POST /api/v1/auth/register', () => {
+describe('Auth API', () => {
     afterAll(async () => {
         await prisma.user.deleteMany()
     })
+
+    describe('POST /api/v1/auth/register', () => {
+    
 
     it('should register a new user successfully', async () => {
         const testUser = {
@@ -48,6 +51,35 @@ describe('POST /api/v1/auth/register', () => {
         const response = await request.post('/api/v1/auth/register').send(testUser);
 
         expect(response.status).toBe(400);
-        expect(response.body.error.password[0]).toBe('Password must be at least 6 characters long');
+        expect(response.body.error[0]).toBe('Password must be at least 6 characters long');
     })
+   })
+   describe('POST /api/v1/auth/login', () => {
+     
+        it('should login an existing user successfully', async () => {
+            const loginData = {
+                email: 'naweltolioba@gmail.com',
+                password:'Nawel1234!'
+            }
+
+            const response = await request.post('/api/v1/auth/login').send(loginData);
+
+            expect(response.status).toBe(200);
+            expect(response.body.token).toBeDefined();
+        })
+
+         it('should fail login with non existing email', async () => {
+            const loginData = {
+                email: 'naweltoloba@gmail.com',
+                password:'Nawel1234!'
+            }
+
+            const response = await request.post('/api/v1/auth/login').send(loginData);
+
+            expect(response.status).toBe(401);
+            expect(response.body.message).toBe('Invalid email');
+        })
+
+   })
 })
+

@@ -1,6 +1,7 @@
+
 import prisma from "../../core/prisma";
 import bcrypt from "bcrypt";
-
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (input:any) => {
     const {email, password, first_name, last_name} = input;
@@ -26,3 +27,33 @@ export const registerUser = async (input:any) => {
 
     return user;
 }
+
+export const loginUser = async (input:any) => {
+    const {email, password} = input;
+    const userExisting = await prisma.user.findUnique({
+        where: {email}
+    })
+
+    if(!userExisting){
+        throw new Error('Invalid email');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, userExisting.password);
+    if(!isPasswordValid){
+        throw new Error('Invalid password');
+    }
+
+    const jwtSecret = process.env.JWT_SECRET as string;
+
+    const token = jwt.sign({
+        id: userExisting.id,
+        role: userExisting.role
+    },
+    jwtSecret,
+    {
+        expiresIn: '15m'
+    })
+
+    return token;
+}
+
