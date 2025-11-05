@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import { registerUser, loginUser } from "./auth.service";
 import prisma from "../../core/prisma";
+import { authRequest } from "../../core/middleware/auth.middleware";
 
 
 
@@ -35,4 +36,13 @@ export const loginHandler = async (req: Request, res: Response) => {
            return res.status(500).json({ message: "Internal server error" });
         }
     }
+}
+
+export const meHandler = async (req: authRequest, res: Response) => {
+
+    if (req.user) {
+        return res.status(200). json(req.user);
+    }
+
+    return res.status(401).json({ message: "Unauthorized" });
 }

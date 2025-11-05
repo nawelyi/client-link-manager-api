@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { registerHandler, loginHandler } from "./auth.controller";
+import { registerHandler, loginHandler, meHandler } from "./auth.controller";
 import { registerSchema, loginSchema } from "./auth.validation";
-
+const { authMiddleware } = require("../../core/middleware/auth.middleware");
 
 const validate = (schema: any) => (req: any, res: any, next: any) => {
 
@@ -20,5 +20,6 @@ const router = Router();
 
 router.post('/register', validate(registerSchema), registerHandler);
 router.post('/login', validate(loginSchema), loginHandler);
+router.get('/me', authMiddleware, meHandler);
 
 export default router;
