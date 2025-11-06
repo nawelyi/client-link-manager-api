@@ -1,6 +1,6 @@
 import { clientSchema } from './client.validation';
 import  Router from 'express';
-import { createClientsHandler } from './client.controller';
+import { createClientsHandler, getClientsHandler } from './client.controller';
 import { authMiddleware } from '../../core/middleware/auth.middleware';
 
 const router = Router();
@@ -14,5 +14,6 @@ const clientValidationMiddleware = (schema: any) => (req: any, res: any, next: a
 }
 
 router.post('/', clientValidationMiddleware(clientSchema), authMiddleware ,createClientsHandler);
+router.get('/', authMiddleware ,getClientsHandler);
 
 export default router;

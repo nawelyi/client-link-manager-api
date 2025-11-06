@@ -12,3 +12,13 @@ export const createClient = async (userId: string, name: string) => {
     })
     return client;
 }
+
+
+export const getClientByUserId = async (userId: string) => {
+    const clients = await prisma.client.findMany({
+        where: { userId }
+    });
+    
+    return clients;
+
+}
