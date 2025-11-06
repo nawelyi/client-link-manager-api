@@ -10,6 +10,6 @@ export const createClientsHandler = async (req: authRequest, res: Response) => {
         const client = await createClient(userId, name);
         return res.status(201).json(client);
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error', error });
     }
 }

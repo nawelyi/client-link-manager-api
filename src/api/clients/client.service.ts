@@ -7,10 +7,8 @@ export const createClient = async (userId: string, name: string) => {
         data: {
             name,
             userId
-        },
-        select: {
-            name: true
         }
+       
     })
     return client;
 }
