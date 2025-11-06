@@ -41,7 +41,7 @@ export const loginHandler = async (req: Request, res: Response) => {
 export const meHandler = async (req: authRequest, res: Response) => {
 
     if (req.user) {
-        return res.status(200). json(req.user);
+        return res.status(200).json(req.user);
     }
 
     return res.status(401).json({ message: "Unauthorized" });
