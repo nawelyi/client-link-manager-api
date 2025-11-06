@@ -1,3 +1,4 @@
+import { id } from 'zod/v4/locales';
 import app from '../../app'
 import prisma from '../../core/prisma'
 import supertest from 'supertest'
@@ -81,5 +82,32 @@ describe('Auth API', () => {
         })
 
    })
+
+    describe('GET /api/v1/auth/me', () => {
+        it('should get the authenticated user info', async () => {
+             const loginData = {
+                email: 'naweltolioba@gmail.com',
+                password:'Nawel1234!'
+            }
+
+            const loginReponse = await request.post('/api/v1/auth/login').send(loginData);
+            const token = loginReponse.body.token;
+            const response = await request.get('/api/v1/auth/me').set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(200);
+            expect(response.body.id).toBeDefined();
+            expect(response.body.role).toBeDefined();
+
+        })
+        it('should fail to get user info with invalid token', async () => {
+            const token = 'meloinventochaval'
+
+            const response = await request.get('/api/v1/auth/me').set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(401);
+            expect(response.body.message).toBe('Invalid token');
+        })
+    })
+
 })
 
