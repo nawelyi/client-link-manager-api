@@ -13,7 +13,7 @@ const clientValidationMiddleware = (schema: any) => (req: any, res: any, next: a
     next();
 }
 
-router.post('/', clientValidationMiddleware(clientSchema), authMiddleware ,createClientsHandler);
+router.post('/', authMiddleware ,clientValidationMiddleware(clientSchema), createClientsHandler);
 router.get('/', authMiddleware ,getClientsHandler);
 
 export default router;

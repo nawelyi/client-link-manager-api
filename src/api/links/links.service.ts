@@ -5,7 +5,7 @@ import prisma from "../../core/prisma";
 
 export const createLink = async (userId: string, data:any) => {
     const {title, url, clientId} = data;
-    const isClientExist = await prisma.client.findUnique({
+    const isClientExist = await prisma.client.findFirst({
         where: {
             id: clientId,
             userId
