@@ -51,5 +51,18 @@ describe('LINKS API', () => {
             expect(response.body.url).toBe(body.url);
             expect(response.body.clientId).toBe(body.clientId);
         });
+
+        it('should return 400 if required field URL is wrong (zod validation)', async () => {
+            const body = {
+                title: 'Test Link',
+                url: 'invalida',
+                clientId: getClient.body.id
+            }
+            const response = await request.post('/api/v1/links').set('Authorization', `Bearer ${token.body.token}`).send(body);
+
+            console.log(response.body);
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].message).toBe('Invalid URL format');
+        });
     });
 });
