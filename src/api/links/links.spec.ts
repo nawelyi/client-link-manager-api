@@ -60,9 +60,21 @@ describe('LINKS API', () => {
             }
             const response = await request.post('/api/v1/links').set('Authorization', `Bearer ${token.body.token}`).send(body);
 
-            console.log(response.body);
+           
             expect(response.status).toBe(400);
             expect(response.body.errors[0].message).toBe('Invalid URL format');
+        });
+        it('should return 400 if client does not exist with false CUID for clientId field (controller/service error)', async () => {
+            const body = {
+                title: 'Test Link',
+                url: 'https://example.com',
+                clientId: 'cku4f8q7p0001x9m4n7y2h3zt'
+
+            }
+            const response = await request.post('/api/v1/links').set('Authorization', `Bearer ${token.body.token}`).send(body);
+
+            expect(response.status).toBe(400);
+            expect(response.body.message).toBe('Client does not exist');
         });
     });
 });
