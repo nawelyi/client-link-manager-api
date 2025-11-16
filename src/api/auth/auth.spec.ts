@@ -51,7 +51,7 @@ describe('Auth API', () => {
         const response = await request.post('/api/v1/auth/register').send(testUser);
 
         expect(response.status).toBe(400);
-        expect(response.body.error[0]).toBe('Password must be at least 6 characters long');
+        expect(response.body.errors[0].message).toBe('Password must be at least 6 characters long');
     })
    })
    describe('POST /api/v1/auth/login', () => {
