@@ -24,3 +24,26 @@ export const createLink = async (userId: string, data:any) => {
     });
     return link;
 }
+
+export const getAllLinks = async (userId:string, data:any) => {
+    const clientId = data.id;
+    const isClientExist = await prisma.client.findFirst({
+        where: {
+            id: clientId,
+            userId
+        }
+    })
+
+    if(!isClientExist) {
+        throw new Error("Client does not exist");
+    }
+
+    const getLinks = await prisma.link.findMany({
+        where: {
+            clientId
+        }
+    })
+
+    return getLinks
+
+}
