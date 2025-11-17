@@ -25,8 +25,8 @@ export const createLink = async (userId: string, data:any) => {
     return link;
 }
 
-export const getAllLinks = async (userId:string, data:any) => {
-    const clientId = data.id;
+export const getAllLinks = async (userId:string, clientId:any) => {
+ 
     const isClientExist = await prisma.client.findFirst({
         where: {
             id: clientId,
