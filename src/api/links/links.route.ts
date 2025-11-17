@@ -14,7 +14,7 @@ const router = Router();
 
 
 router.post('/',authMiddleware,validateMiddleware(z.object({body:createLinkSchema})) ,createLinkHandler);
-router.get("/:id", authMiddleware, validateMiddleware(z.object({query:getAllLinksSchema})), getLinksHandler)
+router.get("/:clientId", authMiddleware, validateMiddleware(z.object({params:getAllLinksSchema})), getLinksHandler)
 
 
 

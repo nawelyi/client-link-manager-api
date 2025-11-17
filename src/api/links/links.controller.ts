@@ -20,12 +20,12 @@ export const createLinkHandler = async (req:authRequest, res:Response) => {
 
 export const getLinksHandler = async (req: authRequest, res:Response) => {
     const userId = req.user?.id as string;
-    const clientId = req.params.id;
+    const clientId = req.params.clientId;
     try {
-        const getLinks = getAllLinks(userId, clientId)
+        const getLinks = await getAllLinks(userId, clientId)
         res.status(200).json(getLinks)
     } catch (error: any) {
-        res.status(400).json({error: error.mesagge})
+        res.status(400).json({errors: error.message})
     }
     
 }
