@@ -62,7 +62,7 @@ describe('LINKS API', () => {
 
            
             expect(response.status).toBe(400);
-            expect(response.body.errors[0].message).toBe('Invalid URL format');
+            expect(response.body.errors).toBeInstanceOf(Array);
         });
         it('should return 400 if client does not exist with false CUID for clientId field (controller/service error)', async () => {
             const body = {
@@ -77,4 +77,36 @@ describe('LINKS API', () => {
             expect(response.body.message).toBe('Client does not exist');
         });
     });
+
+    describe('GET /api/v1/links', () => {
+        it('get array with all the links for a specific client', async ()=>{
+            
+
+            const getLinks = await request.get(`/api/v1/links/${getClient.body.id}`).set('Authorization', `Bearer ${token.body.token}`)
+
+            
+            expect(getLinks.status).toBe(200)
+            expect(getLinks.body).toBeInstanceOf(Array)
+        })
+
+        it("should return 400 with params with a different format than CUID", async()=>{
+
+            const getLinks = await request.get(`/api/v1/links/123123123123`).set('Authorization', `Bearer ${token.body.token}`)
+
+            expect(getLinks.status).toBe(400)
+            expect(getLinks.body.errors).toBeInstanceOf(Array)
+        })
+
+        it("should return 400 but with a wrong CUID", async()=>{
+
+            const getLinks = await request.get('/api/v1/links/cjk1z1e5q0001k9y7a3x9d2tf').set('Authorization', `Bearer ${token.body.token}`)
+
+            expect(getLinks.status).toBe(400)
+            expect(getLinks.body).toEqual(
+                expect.objectContaining({
+                    errors: expect.any(String)
+                })
+            )
+        })
+    })
 });

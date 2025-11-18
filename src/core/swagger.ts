@@ -9,7 +9,7 @@ import { z } from './zod';
 // Importa TODOS tus schemas refactorizados
 import { registerSchema, loginSchema } from '../api/auth/auth.validation';
 import { clientSchema } from '../api/clients/client.validation'; // Usando tu nombre de schema
-import { createLinkSchema } from '../api/links/links.validation';
+import { createLinkSchema, getAllLinksSchema } from '../api/links/links.validation';
 
 
 
@@ -22,6 +22,7 @@ registry.register('RegisterUser', registerSchema);
 registry.register('LoginUser', loginSchema);
 registry.register('CreateClient', clientSchema); // Usando tu nombre de schema
 registry.register('CreateLink', createLinkSchema);
+registry.register('GetAllClientLinks', getAllLinksSchema)
 
 // Schema de Error
 const ErrorSchema = z.object({
@@ -130,6 +131,25 @@ registry.registerPath({
   },
   responses: {
     201: { description: 'Link creado' },
+    401: { description: 'No autorizado' },
+  },
+});
+
+// ... (después del registry.registerPath de POST /links)
+
+registry.registerPath({
+  method: 'get',
+  path: '/links',
+  summary: 'Obtener todos los links de un cliente específico',
+  tags: ['Links'],
+  security: [{ bearerAuth: [] }],
+  request: {
+    // ¡La documentación para un Query Param!
+    query: getAllLinksSchema,
+  },
+  responses: {
+    200: { description: 'Lista de links' },
+    400: { description: 'Cliente no encontrado' },
     401: { description: 'No autorizado' },
   },
 });

@@ -5,3 +5,7 @@ export const createLinkSchema = z.object({
     url: z.url('Invalid URL format'),
     clientId: z.cuid('Invalid client ID format'),
 });
+
+export const getAllLinksSchema = z.object({
+    clientId: z.cuid('invalid client ID format')
+})
