@@ -3,7 +3,6 @@ import Request  from "supertest";
 import app from  '../../app' 
 import prisma from "../../core/prisma";
 import { Response } from "supertest";
-import { array } from "zod";
 
 
 const request = Request(app);
